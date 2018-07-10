@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="./resources/css/index.css" type="text/css" rel="stylesheet">
+  <title></title>
+</head>
+<body>
+  <div class="game_field">
+    <div class="player"></div>
+    <div class="obstacle1"></div>
+    <div class="obstacle2"></div>
+  </div>
+  <script>
+    var board = [
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,1,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,1,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0]
+    ]
+
+    function drawBoard(boardArray){
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#FF0000";
+      ctx.fillRect(0,0,150,75);
+    }
+
+    function isOutside(destinationX, destinationY) {
+      if (destinationX < 0 || destinationY < 0) {
+        return true;
+      } else if (destinationX > 450 || destinationY > 450) {
+        return true;
+      }
+      return false;
+    }
+
+    function isForbidden(destinationX, destinationY) {
+      if (isOutside(destinationX, destinationY)) {
+        return true;
+      } else if (destinationX === 50 && destinationY === 50) {
+        return true;
+      } else if (destinationX === 300 && destinationY === 100 ) {
+        return true;
+      }
+      return false;
+    }
+
+    function movement(element, destinationX, destinationY) {
+      element.style.top = destinationY + 'px';
+      element.style.left = destinationX + 'px';
+    }
+
+    function onKeyDown(evt) {
+      var key = evt.key;
+      var p1 = document.querySelectorAll('.player')[0];
+      var currentY = destinationY = p1.offsetTop;
+      var currentX = destinationX = p1.offsetLeft;
+
+      if (key === 'ArrowDown') {
+        destinationY = currentY + 50;
+      } else if (key === 'ArrowUp') {
+        destinationY = currentY - 50;
+      } else if (key === 'ArrowRight') {
+        destinationX = currentX + 50;
+      } else if (key === 'ArrowLeft') {
+        destinationX = currentX - 50;
+      }
+
+      if (!isForbidden(destinationX, destinationY)) {
+        movement(p1, destinationX, destinationY);
+      }
+    }
+    window.addEventListener('keydown', onKeyDown);
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  <div class="game_field">
+    <div id="circle" style="height:50px;width:50px;position:absolute;background-color: hotpink;border-radius:50%;"></div>
+  </div>
+  <script>
+    var circle = document.querySelectorAll('#circle')[0];
+
+    function delay(ms) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+      })
+    }
+
+    async function diagonal() {
+      for(var i = 0; i < 600; i += 1) {
+        let x = i + 'px';
+        let y = i + 'px';
+        await delay(10);
+        circle.style.top = y;
+        circle.style.left = x;
+      }
+    }
+
+    async function rowCol() {
+      for(var i = 0; i < 600; i += 50) {
+        for (var j = 0; j < 600; j += 50) {
+          let x = j + 'px';
+          let y = i + 'px';
+          await delay(100);
+          circle.style.top = y;
+          circle.style.left = x;
+        }
+      }
+    }
+
+    diagonal();
+    //rowCol();
+  </script>
+</body>
+</html>
