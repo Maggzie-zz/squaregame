@@ -6,10 +6,8 @@
 </head>
 <body>
   <div class="game_field">
-    <div class="player"></div>
   </div>
   <script>
-
     var gameGrid = [
       [0,1,0,0,0,0,0,0,0,0],
       [0,0,0,0,1,0,0,0,0,0],
@@ -23,15 +21,19 @@
       [0,0,0,0,0,0,0,0,0,0],
     ];
 
+    var playerElement = document.querySelectorAll('.player')[0];
+
     var player = {
-      starttop: 0,
-      startleft: 0,
-      element: document.querySelectorAll('.player')[0],
+      startTop: 0,
+      startLeft: 0,
       move: function(x,y) {
-        player.element.style.top = destinationY * 50 + 'px';
-        player.element.style.left = destinationX * 50 + 'px';
+
+
+        // THIS IS TEMPORARY CODE AND SHOULD BE REMOVED WHEN WE HAVE A RENDER-FUNCTION
+        playerElement.style.top = player.y * 50 + 'px';
+        playerElement.style.left = player.x * 50 + 'px';
       }
-    }
+    };
 
     function drawBoard() {
       for (var row = 0; row < gameGrid.length; row++) {
@@ -46,13 +48,14 @@
           }
         }
       }
+      initPlayer();
     }
 
     function initPlayer() {
       var newDiv = document.createElement("div");
       newDiv.className = "player";
-      newDiv.style.top = player.starttop * 50 + "px";
-      newDiv.style.left = player.startleft * 50 + "px";
+      newDiv.style.top = player.startTop * 50 + "px";
+      newDiv.style.left = player.startLeft * 50 + "px";
       var parentDiv = document.querySelector(".game_field");
       parentDiv.appendChild(newDiv);
     }
@@ -73,8 +76,10 @@
     function onKeyDown(evt) {
       var key = evt.key;
       var p1 = document.querySelectorAll('.player')[0];
-      var currentY = destinationY = p1.offsetTop / 50;
-      var currentX = destinationX = p1.offsetLeft / 50;
+      var currentY = p1.offsetTop / 50;
+      var destinationY = currentY;
+      var currentX = p1.offsetLeft / 50;
+      var destinationX = currentX;
 
       if (key === 'ArrowDown') {
         destinationY = currentY + 1;
@@ -92,6 +97,7 @@
         }
       }
     }
+
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('load', drawBoard);
   </script>
