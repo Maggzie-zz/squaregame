@@ -6,8 +6,10 @@
 </head>
 <body>
   <div class="game_field">
+    <div class="overlay"></div>
   </div>
   <script>
+//Game-logic (state)
     var gameGrid = [
       [0,1,0,0,0,0,0,0,0,0],
       [0,0,0,0,1,0,0,0,0,0],
@@ -21,19 +23,61 @@
       [0,0,0,0,0,0,0,0,0,0],
     ];
 
-    var playerElement = document.querySelectorAll('.player')[0];
+    function isForbidden(destinationX, destinationY) {
+      if (destinationX < 0 || destinationY < 0) {
+        return true;
+      } else if (destinationX > 9 || destinationY > 9) {
+        return true;
+      } else if (gameGrid[destinationY][destinationX] === 1) {
+        return true;
+      }
+      return false;
+    }
 
     var player = {
-      startTop: 0,
-      startLeft: 0,
-      move: function(x,y) {
-
-
-        // THIS IS TEMPORARY CODE AND SHOULD BE REMOVED WHEN WE HAVE A RENDER-FUNCTION
-        playerElement.style.top = player.y * 50 + 'px';
-        playerElement.style.left = player.x * 50 + 'px';
+      x: 0,
+      y: 0,
+      moveDown: function() {
+        var destinationY = this.y + 1;
+        if (!isForbidden(this.x, destinationY)) {
+          this.y = destinationY;
+        }
+      },
+      moveUp: function() {
+        var destinationY = this.y - 1;
+        if (!isForbidden(this.x, destinationY)) {
+          this.y = destinationY;
+        }
+      },
+      moveRight: function() {
+        var destinationX = this.x + 1;
+        if (!isForbidden(destinationX, this.y)) {
+          this.x = destinationX;
+        }
+      },
+      moveLeft: function() {
+        var destinationX = this.x - 1;
+        if (!isForbidden(destinationX, this.y)) {
+          this.x = destinationX;
+        }
       }
     };
+
+//UI
+    function initPlayer() {
+      var newDiv = document.createElement("div");
+      newDiv.className = "player";
+      newDiv.style.top = player.x * 50 + "px";
+      newDiv.style.left = player.y * 50 + "px";
+      var parentDiv = document.querySelector(".game_field");
+      parentDiv.appendChild(newDiv);
+    }
+
+    function updatePlayerPosition(x, y) {
+      var playerElement = document.querySelectorAll('.player')[0];
+      playerElement.style.top = y * 50 + 'px';
+      playerElement.style.left = x * 50 + 'px';
+    }
 
     function drawBoard() {
       for (var row = 0; row < gameGrid.length; row++) {
@@ -51,50 +95,21 @@
       initPlayer();
     }
 
-    function initPlayer() {
-      var newDiv = document.createElement("div");
-      newDiv.className = "player";
-      newDiv.style.top = player.startTop * 50 + "px";
-      newDiv.style.left = player.startLeft * 50 + "px";
-      var parentDiv = document.querySelector(".game_field");
-      parentDiv.appendChild(newDiv);
-    }
-
-    function isOutside(destinationX, destinationY) {
-      if (destinationX < 0 || destinationY < 0) {
-        return true;
-      } else if (destinationX > 9 || destinationY > 9) {
-        return true;
-      }
-      return false;
-    }
-
-    function isForbidden(destinationX, destinationY) {
-      return gameGrid[destinationY][destinationX] === 1;
-    }
-
+//Controller
     function onKeyDown(evt) {
       var key = evt.key;
-      var p1 = document.querySelectorAll('.player')[0];
-      var currentY = p1.offsetTop / 50;
-      var destinationY = currentY;
-      var currentX = p1.offsetLeft / 50;
-      var destinationX = currentX;
-
       if (key === 'ArrowDown') {
-        destinationY = currentY + 1;
+        player.moveDown();
+        updatePlayerPosition(player.x, player.y);
       } else if (key === 'ArrowUp') {
-        destinationY = currentY - 1;
+        player.moveUp();
+        updatePlayerPosition(player.x, player.y);
       } else if (key === 'ArrowRight') {
-        destinationX = currentX + 1;
+        player.moveRight();
+        updatePlayerPosition(player.x, player.y);
       } else if (key === 'ArrowLeft') {
-        destinationX = currentX - 1;
-      }
-
-      if (!isOutside(destinationX, destinationY)) {
-        if (!isForbidden(destinationX, destinationY)) {
-          player.move(destinationX, destinationY);
-        }
+        player.moveLeft();
+        updatePlayerPosition(player.x, player.y);
       }
     }
 

@@ -10,23 +10,32 @@ body {
   height: 500px;
   background: white;
   align-self: center;
+  background-size: cover;
   margin: auto;
   display: flex;
   position: relative;
+  background-image: url("./jungle.jpg");
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .player {
   width: 50px;
   height: 50px;
-  background-color: red;
+  background-size: cover;
   align-self: flex-end;
-  border-radius: 50%;
   position: absolute;
+  background-image: url("./dk.png");
 }
 
 .obstacle {
   width: 50px;
   height: 50px;
-  background-color: blue;
   position: absolute;
+  background-size: cover;
+  background-image: url("./banana.png");
 }
